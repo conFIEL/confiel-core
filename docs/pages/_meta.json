@@ -1,7 +1,6 @@
 {
-  "index": "conFIEL Core",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "Introduction",
+  "kyc-payments": "KYC Payments",
   "about": {
     "title": "About",
     "type": "page"

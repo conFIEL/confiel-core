@@ -1,0 +1,27 @@
+# Encrypted metadata
+
+<p>
+  KYC payments contain <b>two</b> important pieces of encrypted metadata: the
+  signer information, and the `Fulfillment` data needed to release
+  the escrow. These are embedded into a `MemoTag`.
+</p>
+<br />
+<p>
+  The KYC payment starts as an escrow by submitting an `escrowCreate` transaction. The escrow
+  will be a [Timed conditional with expiration
+  ](https://xrpl.org/escrowcreate.html), which means that:
+</p>
+
+- ✅ The `buyer` can release the payment immediately and within 1-15 days.
+- ℹ️ The `seller` can callback the escrow after an unreleased payment from 15-30 days.
+- ❗️ The `buyer` can cancel the payment from 30 days onwards.
+<br/>
+<p>
+  To ensure these times are respected, the `escrowCreate` uses a{" "}
+  `Condition` field which relies on a `Fulfillment`
+  unknown to the `seller`. The `Fulfillment` is stored in two
+  formats:
+</p>
+
+1. Accessible to the `seller` time-locked for 30 days, and encrypted with its public key.
+1. Accessible to the `buyer` encrypted with its public key.
