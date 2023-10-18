@@ -1,3 +1,40 @@
+import { Steps } from "nextra/components";
+
 # Payment workflow
 
-Here's how we get paid.
+<Steps>
+### Purchase order created
+
+The `seller` uses the SDK method `order.create`
+with the following details: `amount`,
+`recipient` (address), `description`,
+`public key`. This information is signed with the{" "}
+`seller`’s <b>conFIEL wallet</b> to generate a JSON Web
+Token (`JWT`) with a QR Code able to be scanned as a
+payment order.
+
+### Purchase order scanned
+
+The `buyer` scans an order QR, where they can see the
+information for the purchase order. If they accept to acquire the
+item, their <b>conFIEL wallet</b> signs the transaction, and generates
+the barebones of a `escrowCreate` transaction, alongside a
+time-locked encrypted `Fulfillment`, included as{" "}
+`MemoData`.
+
+### Escrow Transaction submitted
+
+The `buyer` submits the signed `escrowCreate`
+transaction, which can be indexed by the `seller`’s wallet.
+Once indexed, the `seller` sees the details of the
+transaction and decides to release the item the`buyer`{" "}
+bought.
+
+### Escrow Transaction released
+
+Once the `seller` has released the item, the `buyer`
+can release the escrow by submitting the `Fulfillment` transaction.
+Alternatively, once the time lock has expired, the{" "}
+`buyer` can release the escrow themselves within their own <b>conFIEL wallet</b>.
+
+</Steps>
