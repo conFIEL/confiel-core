@@ -1,73 +1,65 @@
 import {
+  Box,
   Text,
-  Code,
-  List,
-  ListItem,
-  ListIcon,
-  OrderedList,
+  Flex,
+  Heading,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  SimpleGrid,
 } from "@chakra-ui/react";
-import { CheckCircleIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
 
 import { Hero } from "../components/Hero";
 import { Container } from "../components/Container";
 import { Main } from "../components/Main";
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { Footer } from "../components/Footer";
-import Image from "next/image";
-import { CoreWorkflow } from "../components/CoreWorkflow";
-import { CodeBlock } from "../components/CodeBlock";
-import { MEMO_TAG_GENERATION, SEED_GENERATION_CODE } from "../constants";
 
 const Index = () => (
   <Container height="100vh">
     <Hero />
     <Main>
+      <Heading as="h3" fontSize={"2xl"}>
+        Generate payment form
+      </Heading>
       <Text color="text">
-        With the <Code>MemoData</Code> generated, we can now generate the actual
-        <Code>escrowCreate</Code> transaction. The escrow will be a{" "}
-        <Code>Timed conditional with expiration</Code>, which means that:
+        conFIEL Core SDK is able to generate payment forms that can be used to
+        request peer-to-peer transfers through an Escrow.
       </Text>
-      <List spacing={3}>
-        <ListItem>
-          <Text color="text">
-            <ListIcon as={CheckCircleIcon} color="green.500" />
-            The <Code>buyer</Code> can release the payment after 1-15 days.
-          </Text>
-        </ListItem>
-        <ListItem>
-          <Text color="text">
-            <ListIcon as={InfoIcon} color="yellow.500" />
-            The <Code>seller</Code> can submit a claim after an unreleased
-            payment from 15-30 days.
-          </Text>
-        </ListItem>
-        <ListItem>
-          <Text color="text">
-            <ListIcon as={WarningIcon} color="red.500" />
-            The <Code>buyer</Code> can cancel the payment from 30 days onwards.
-          </Text>
-        </ListItem>
-      </List>
-      <Text color={"text"}>
-        To ensure these times are respected, the <Code>escrowCreate</Code> uses
-        a <Code>Condition</Code> field which relies on a{" "}
-        <Code>Fulfillment</Code>
-        unknown to the <Code>buyer</Code>. The <Code>Fulfillment</Code> is
-        stored in two formats:
+      <Text color="text" fontSize="sm">
+        To generate a form, connect your <b>conFIEL ID</b> wallet to
+        automatically fill the “Recipient” fields.
       </Text>
-      <OrderedList spacing={3}>
-        <ListItem color="text">
-          Accessible to the <Code>seller</Code> time-locked for 30 days, and
-          encrypted with its public key.
-        </ListItem>
-        <ListItem color="text">
-          Accessible to the <Code>buyer</Code> encrypted with its public key.
-        </ListItem>
-      </OrderedList>
-      <Text color="text">
-        The following workflow explains these different stages.
-      </Text>
-      <CoreWorkflow />
+      <Flex borderWidth="1px" borderRadius="lg">
+        <SimpleGrid columns={[1,1,2,2]} w="100%">
+          <Flex p="6" flexDir={"column"} gap="10">
+            <FormControl>
+              <FormLabel>Payment name</FormLabel>
+              <Input type="text" placeholder="Nano Ledger" />
+              <FormHelperText>
+                A product name to describe the actual item to transact.
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Payment order number</FormLabel>
+              <Input type="text" placeholder="182766-21" />
+              <FormHelperText>
+                A unique number used to identify the payment for your own
+                records.
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Recipient address</FormLabel>
+              <Input isDisabled type="text" placeholder="rHb9CJAWyB4..." />
+              <FormHelperText>
+                The deposit address for your payment will be available here.
+              </FormHelperText>
+            </FormControl>
+          </Flex>
+          <Box w="320px" bg="#aaa" m="5" h="480px" />
+        </SimpleGrid>
+      </Flex>
     </Main>
 
     <DarkModeSwitch />
