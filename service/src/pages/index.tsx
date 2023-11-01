@@ -12,6 +12,8 @@ import {
   Button,
   InputGroup,
   InputRightElement,
+  NumberInput,
+  NumberInputField,
 } from "@chakra-ui/react";
 
 import { Hero } from "../components/Hero";
@@ -21,10 +23,24 @@ import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { Footer } from "../components/Footer";
 import { ConFIELQRCode } from "../components/ConFIELQRCode/ConFIELQRCode";
 import { useState } from "react";
+import {
+  CONFIEL_CORE_DEMO_PRODUCT_AMOUNT,
+  CONFIEL_CORE_DEMO_PRODUCT_DESCRIPTION,
+  CONFIEL_CORE_DEMO_PRODUCT_NAME,
+} from "../constants/conFIEL";
+
+type Product = {
+  name: string;
+  description: string;
+  amount: number;
+};
 
 const Index = () => {
-  const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
+  const [product, setProduct] = useState<Product>({
+    name: "",
+    description: "",
+    amount: 0
+  });
   return (
     <Container height="100vh">
       <Hero />
@@ -46,13 +62,28 @@ const Index = () => {
               <FormControl>
                 <FormLabel>Product name</FormLabel>
                 <InputGroup>
-                  <Input type="text" placeholder="Nano Ledger" />
+                  <Input
+                    type="text"
+                    placeholder="Nano Ledger"
+                    value={product?.name}
+                    onChange={(e) =>
+                      setProduct((product) => ({
+                        ...product,
+                        name: e.target.value,
+                      }))
+                    }
+                  />
                   <InputRightElement width="4.5rem">
                     <Button
                       fontSize={"xs"}
                       h="1.75rem"
                       size="sm"
-                      onClick={() => {}}
+                      onClick={() =>
+                        setProduct((product) => ({
+                          ...product,
+                          name: CONFIEL_CORE_DEMO_PRODUCT_NAME,
+                        }))
+                      }
                     >
                       Demo
                     </Button>
@@ -66,13 +97,28 @@ const Index = () => {
               <FormControl>
                 <FormLabel>Product description</FormLabel>
                 <InputGroup>
-                  <Textarea placeholder="Cold wallet to handle crypto..." />
+                  <Textarea
+                    onChange={(e) =>
+                      setProduct((product) => ({
+                        ...product,
+                        description: e.target.value,
+                      }))
+                    }
+                    value={product?.description}
+                    placeholder="Cold wallet to handle crypto..."
+                    pr="4.5rem"
+                  />
                   <InputRightElement width="4.5rem">
                     <Button
                       fontSize={"xs"}
                       h="1.75rem"
                       size="sm"
-                      onClick={() => {}}
+                      onClick={() =>
+                        setProduct((product) => ({
+                          ...product,
+                          description: CONFIEL_CORE_DEMO_PRODUCT_DESCRIPTION,
+                        }))
+                      }
                     >
                       Demo
                     </Button>
@@ -86,13 +132,28 @@ const Index = () => {
               <FormControl>
                 <FormLabel>Total amount</FormLabel>
                 <InputGroup>
-                  <Input type="text" placeholder="$99.00" />
+                  <NumberInput precision={2} value={product?.amount}>
+                    <NumberInputField
+                      placeholder="$99.00"
+                      onChange={(e) =>
+                        setProduct((product) => ({
+                          ...product,
+                          amount: Number(e.target.value),
+                        }))
+                      }
+                    />
+                  </NumberInput>
                   <InputRightElement width="4.5rem">
                     <Button
                       fontSize={"xs"}
                       h="1.75rem"
                       size="sm"
-                      onClick={() => {}}
+                      onClick={() =>
+                        setProduct((product) => ({
+                          ...product,
+                          amount: CONFIEL_CORE_DEMO_PRODUCT_AMOUNT,
+                        }))
+                      }
                     >
                       Demo
                     </Button>
