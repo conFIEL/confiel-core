@@ -5,11 +5,10 @@ import { QR_CODE_STYLING_OPTS } from "../../constants/qrcode";
 const qrCode = new QRCodeStyling(QR_CODE_STYLING_OPTS);
 
 export const QRCode = ({
-  payload = "https://confiel.id",
+  payload = "https://app.confiel.id",
 }: {
   payload: string;
 }) => {
-  const [url] = useState(payload);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -18,9 +17,9 @@ export const QRCode = ({
 
   useEffect(() => {
     qrCode.update({
-      data: url,
+      data: payload,
     });
-  }, [url]);
+  }, [payload]);
 
   return <><div ref={ref} /></>;
 };

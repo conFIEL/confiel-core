@@ -10,17 +10,21 @@ import {
 import { useEffect } from "react";
 
 export const ConFIELQRCodeDeveloperTools = ({
+  payload,
   setBaseURL,
   baseURL,
 }: {
-  baseURL: string;
+  payload: string,
+  baseURL: string,
   setBaseURL: (url: string) => void;
 }) => {
-  const { onCopy, value, setValue, hasCopied } = useClipboard(baseURL);
+  const { onCopy, setValue, hasCopied } = useClipboard(payload);
 
   useEffect(() => {
-    setValue(baseURL);
+    setBaseURL(baseURL);
   }, [baseURL]);
+
+  console.log("PAyload", payload)
 
   return (
     <Flex mt="2" flexDir={"column"} gap="5">
@@ -36,7 +40,7 @@ export const ConFIELQRCodeDeveloperTools = ({
           The URL to use for conFIEL ID App.
         </FormHelperText>
       </FormControl>
-      <Text fontSize={"xs"} onClick={onCopy}>
+      <Text fontSize={"xs"} onClick={() => onCopy()}>
         <CopyIcon mr="2"/>
         {hasCopied ? `Copied QR Code content` : `Copy QR Code content`}
       </Text>

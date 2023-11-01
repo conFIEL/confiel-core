@@ -22,11 +22,12 @@ import { Main } from "../components/Main";
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { Footer } from "../components/Footer";
 import { ConFIELQRCode } from "../components/ConFIELQRCode/ConFIELQRCode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CONFIEL_CORE_DEMO_PRODUCT_AMOUNT,
   CONFIEL_CORE_DEMO_PRODUCT_DESCRIPTION,
   CONFIEL_CORE_DEMO_PRODUCT_NAME,
+  CONFIEL_ID_BASE_URI,
 } from "../constants/conFIEL";
 
 type Product = {
@@ -39,8 +40,18 @@ const Index = () => {
   const [product, setProduct] = useState<Product>({
     name: "",
     description: "",
-    amount: 0
+    amount: 0,
   });
+  const [qrPayload, setQRPayload] = useState(CONFIEL_ID_BASE_URI);
+  const [baseURL, setBaseURL] = useState(CONFIEL_ID_BASE_URI);
+  const generatePaymentOrder = () => {
+    const paymentOrderAsBase64 = btoa(JSON.stringify(product));
+    setQRPayload(`${baseURL}?paymentOrder=${paymentOrderAsBase64}`);
+    console.log("yay");
+  };
+  useEffect(() => {
+    generatePaymentOrder();
+  }, [baseURL])
   return (
     <Container height="100vh">
       <Hero />
@@ -164,10 +175,16 @@ const Index = () => {
                   in exchange of product.
                 </FormHelperText>
               </FormControl>
-              <Button colorScheme="red">Generate payment order</Button>
+              <Button onClick={() => generatePaymentOrder()} colorScheme="red">
+                Generate payment order
+              </Button>
             </Flex>
             <Box m="5">
-              <ConFIELQRCode payload="https://app.confiel.id" />
+              <ConFIELQRCode
+                payload={qrPayload}
+                setBaseURL={setBaseURL}
+                baseURL={baseURL}
+              />
             </Box>
           </SimpleGrid>
           <Box m="5">

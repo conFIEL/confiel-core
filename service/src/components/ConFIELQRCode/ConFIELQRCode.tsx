@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CONFIEL_ID_BASE_URI } from "../../constants/conFIEL";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { ConFIELQRCodeDeveloperTools } from "./ConFIELQRCodeDeveloperTools";
@@ -9,9 +9,22 @@ const QRCode = dynamic(() => import("./QRCode").then((mod) => mod.QRCode), {
   ssr: false,
 });
 
-export const ConFIELQRCode = ({ payload }: { payload: string }) => {
-  const [baseURL, setBaseURL] = useState(CONFIEL_ID_BASE_URI);
+export const ConFIELQRCode = ({
+  baseURL,
+  setBaseURL,
+  payload,
+}: {
+  setBaseURL: (baseUrl: string) => void;
+  baseURL: string;
+  payload: string;
+}) => {
   const [enableDeveloperTools, setEnableDeveloperTools] = useState(false);
+  const [actualPayload, setActualPayload] = useState(payload);
+
+  useEffect(() => {
+    setActualPayload(payload);
+  }, [payload]);
+
   return (
     <Flex flexDir={"column"} gap="5" align={"center"}>
       <Box w="336px">
@@ -24,7 +37,7 @@ export const ConFIELQRCode = ({ payload }: { payload: string }) => {
           p="2"
           justifyContent={"center"}
         >
-          <QRCode payload={payload} />
+          <QRCode payload={actualPayload} />
         </Box>
       </Box>
       <Box textAlign={"center"}>
@@ -39,7 +52,7 @@ export const ConFIELQRCode = ({ payload }: { payload: string }) => {
           Verification code: X2SJML
         </Text>
       </Box>
-      <Box mt="10" w="100%" textAlign={'right'}>
+      <Box mt="10" w="100%" textAlign={"right"}>
         <Text
           onClick={() => setEnableDeveloperTools(!enableDeveloperTools)}
           fontFamily={"mono"}
@@ -51,6 +64,7 @@ export const ConFIELQRCode = ({ payload }: { payload: string }) => {
         </Text>
         {enableDeveloperTools && (
           <ConFIELQRCodeDeveloperTools
+            payload={actualPayload}
             baseURL={baseURL}
             setBaseURL={setBaseURL}
           />
