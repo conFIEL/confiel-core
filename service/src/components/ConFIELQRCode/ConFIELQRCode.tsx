@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CONFIEL_ID_BASE_URI } from "../../constants/conFIEL";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { ConFIELQRCodeDeveloperTools } from "./ConFIELQRCodeDeveloperTools";
+import { useChannelStore } from "../../store/Pusher";
 
 const QRCode = dynamic(() => import("./QRCode").then((mod) => mod.QRCode), {
   ssr: false,
@@ -18,6 +19,8 @@ export const ConFIELQRCode = ({
   baseURL: string;
   payload: string;
 }) => {
+  const channelInstance = useChannelStore((state) => state.instance);
+
   const [enableDeveloperTools, setEnableDeveloperTools] = useState(false);
   const [actualPayload, setActualPayload] = useState(payload);
 
@@ -49,7 +52,7 @@ export const ConFIELQRCode = ({
           code.
         </Text>
         <Text mt="3" fontSize={"xs"} fontFamily={"mono"}>
-          Verification code: X2SJML
+          Code ID: {channelInstance?.id}
         </Text>
       </Box>
       <Box mt="10" w="100%" textAlign={"right"}>

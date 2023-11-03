@@ -14,6 +14,7 @@ import {
   InputRightElement,
   NumberInput,
   NumberInputField,
+  useToast,
 } from "@chakra-ui/react";
 
 import { Hero } from "../components/Hero";
@@ -29,6 +30,8 @@ import {
   CONFIEL_CORE_DEMO_PRODUCT_NAME,
   CONFIEL_ID_BASE_URI,
 } from "../constants/conFIEL";
+import { PusherChannel } from "../components/PusherChannel/PusherChannel";
+import { useChannelStore } from "../store/Pusher";
 
 type Product = {
   name: string;
@@ -37,6 +40,8 @@ type Product = {
 };
 
 const Index = () => {
+  const channelInstance = useChannelStore((state) => state.instance);
+  const toast = useToast();
   const [product, setProduct] = useState<Product>({
     name: "",
     description: "",
@@ -45,13 +50,21 @@ const Index = () => {
   const [qrPayload, setQRPayload] = useState(CONFIEL_ID_BASE_URI);
   const [baseURL, setBaseURL] = useState(CONFIEL_ID_BASE_URI);
   const generatePaymentOrder = () => {
-    const paymentOrderAsBase64 = btoa(JSON.stringify(product));
-    setQRPayload(`${baseURL}?paymentOrder=${paymentOrderAsBase64}`);
-    console.log("yay");
+    if (!channelInstance) {
+      toast({
+        title: "Error creating payment order",
+        description: "Unable to create payment order since channel ID is missing",
+        status: "error",
+        isClosable: true,
+      })
+      return;
+    }
+    const paymentOrderAsBase64 = encodeURIComponent(btoa(JSON.stringify(product)));
+    setQRPayload(`${baseURL}?paymentOrder=${paymentOrderAsBase64}&paymentId=${channelInstance.id}`);
   };
   useEffect(() => {
     generatePaymentOrder();
-  }, [baseURL])
+  }, [baseURL]);
   return (
     <Container height="100vh">
       <Hero />
@@ -199,6 +212,7 @@ const Index = () => {
         </Flex>
       </Main>
 
+      <PusherChannel />
       <DarkModeSwitch />
       <Footer>
         <Text>A Wave 5 XRPL Grant sponsored project.</Text>
