@@ -32,6 +32,7 @@ import {
 } from "../constants/conFIEL";
 import { PusherChannel } from "../components/PusherChannel/PusherChannel";
 import { useChannelStore } from "../store/Pusher";
+import { useWalletStore } from "../store/wallet";
 
 type Product = {
   name: string;
@@ -41,6 +42,7 @@ type Product = {
 
 const Index = () => {
   const channelInstance = useChannelStore((state) => state.instance);
+  const address = useWalletStore((state) => state.address);
   const toast = useToast();
   const [product, setProduct] = useState<Product>({
     name: "",
@@ -49,14 +51,9 @@ const Index = () => {
   });
   const [qrPayload, setQRPayload] = useState(CONFIEL_ID_BASE_URI);
   const [baseURL, setBaseURL] = useState(CONFIEL_ID_BASE_URI);
+
   const generatePaymentOrder = () => {
     if (!channelInstance) {
-      toast({
-        title: "Error creating payment order",
-        description: "Unable to create payment order since channel ID is missing",
-        status: "error",
-        isClosable: true,
-      })
       return;
     }
     const paymentOrderAsBase64 = encodeURIComponent(btoa(JSON.stringify(product)));
@@ -203,7 +200,7 @@ const Index = () => {
           <Box m="5">
             <FormControl>
               <FormLabel>Recipient address</FormLabel>
-              <Input isDisabled type="text" placeholder="rHb9CJAWyB4..." />
+              <Input isDisabled value={address} type="text" placeholder="Recipient address will be autofilled here" />
               <FormHelperText>
                 The deposit address for your payment will be available here.
               </FormHelperText>

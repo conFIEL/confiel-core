@@ -5,6 +5,7 @@ import { CONFIEL_ID_BASE_URI } from "../../constants/conFIEL";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { ConFIELQRCodeDeveloperTools } from "./ConFIELQRCodeDeveloperTools";
 import { useChannelStore } from "../../store/Pusher";
+import { useWalletStore } from "../../store/wallet";
 
 const QRCode = dynamic(() => import("./QRCode").then((mod) => mod.QRCode), {
   ssr: false,
@@ -20,6 +21,7 @@ export const ConFIELQRCode = ({
   payload: string;
 }) => {
   const channelInstance = useChannelStore((state) => state.instance);
+  const address = useWalletStore((state) => state.address);
 
   const [enableDeveloperTools, setEnableDeveloperTools] = useState(false);
   const [actualPayload, setActualPayload] = useState(payload);
@@ -34,7 +36,7 @@ export const ConFIELQRCode = ({
         <Box
           borderWidth="10px"
           borderRadius="lg"
-          borderColor={"rgb(229,104,105)"}
+          borderColor={address ? "rgb(229,104,105)" : "#000"}
           bgColor={"#fff"}
           textAlign={"center"}
           p="2"

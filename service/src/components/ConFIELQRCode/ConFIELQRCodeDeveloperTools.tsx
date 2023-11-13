@@ -24,8 +24,6 @@ export const ConFIELQRCodeDeveloperTools = ({
     setBaseURL(baseURL);
   }, [baseURL]);
 
-  console.log("PAyload", payload)
-
   return (
     <Flex mt="2" flexDir={"column"} gap="5">
       <FormControl>
