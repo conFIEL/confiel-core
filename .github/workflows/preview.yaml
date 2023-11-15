@@ -17,9 +17,9 @@ jobs:
       - name: Set Deployment Directory
         id: set-dir
         run: |
-          if [[ $GITHUB_REF == ' refs/heads/*/docs/*' ]]; then
+          if [[ $GITHUB_REF == ' refs/heads/preview/docs/*' ]]; then
             echo "::set-output name=dir::docs"
-          elif [[ $GITHUB_REF == ' refs/heads/*/service/*' ]]; then
+          elif [[ $GITHUB_REF == ' refs/heads/preview/service/*' ]]; then
             echo "::set-output name=dir::service"
           fi
 
