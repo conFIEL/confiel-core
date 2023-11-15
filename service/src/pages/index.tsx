@@ -52,12 +52,21 @@ const Index = () => {
   const [qrPayload, setQRPayload] = useState(CONFIEL_ID_BASE_URI);
   const [baseURL, setBaseURL] = useState(CONFIEL_ID_BASE_URI);
 
-  const generatePaymentOrder = () => {
+  const generatePaymentOrder = (
+    recipientAddress?: string,
+    paymentStatus?: "confirmed"
+  ) => {
     if (!channelInstance) {
       return;
     }
-    const paymentOrderAsBase64 = encodeURIComponent(btoa(JSON.stringify(product)));
-    setQRPayload(`${baseURL}?paymentOrder=${paymentOrderAsBase64}&paymentId=${channelInstance.id}`);
+    const paymentOrderAsBase64 = encodeURIComponent(
+      btoa(JSON.stringify(product))
+    );
+    let qrPayload = `${baseURL}?paymentOrder=${paymentOrderAsBase64}&paymentId=${channelInstance.id}`;
+    if (recipientAddress && paymentStatus) {
+      qrPayload += `&recipientAddress=${recipientAddress}&paymentStatus=${paymentStatus}`;
+    }
+    setQRPayload(qrPayload);
   };
   useEffect(() => {
     generatePaymentOrder();
@@ -185,9 +194,22 @@ const Index = () => {
                   in exchange of product.
                 </FormHelperText>
               </FormControl>
-              <Button onClick={() => generatePaymentOrder()} colorScheme="red">
-                Generate payment order
-              </Button>
+              <Flex flexDir={'column'} gap='2'>
+                <Button
+                  onClick={() => generatePaymentOrder()}
+                  colorScheme="gray"
+                >
+                  Generate payment order
+                </Button>
+                {address && (
+                  <Button
+                    onClick={() => generatePaymentOrder(address, "confirmed")}
+                    colorScheme="red"
+                  >
+                    Confirm recipient address
+                  </Button>
+                )}
+              </Flex>
             </Flex>
             <Box m="5">
               <ConFIELQRCode
@@ -200,7 +222,12 @@ const Index = () => {
           <Box m="5">
             <FormControl>
               <FormLabel>Recipient address</FormLabel>
-              <Input isDisabled value={address} type="text" placeholder="Recipient address will be autofilled here" />
+              <Input
+                isDisabled
+                value={address}
+                type="text"
+                placeholder="Recipient address will be autofilled here"
+              />
               <FormHelperText>
                 The deposit address for your payment will be available here.
               </FormHelperText>
