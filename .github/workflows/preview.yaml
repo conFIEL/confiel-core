@@ -5,8 +5,8 @@ env:
 on:
   push:
     branches:
-      - 'preview/docs/*'
-      - 'preview/service/*'
+      - '*/docs/*'
+      - '*/service/*'
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
@@ -17,9 +17,9 @@ jobs:
       - name: Set Deployment Directory
         id: set-dir
         run: |
-          if [[ $GITHUB_REF == 'refs/heads/preview/docs/*' ]]; then
+          if [[ $GITHUB_REF == 'refs/heads/*/docs/*' ]]; then
             echo "::set-output name=dir::docs"
-          elif [[ $GITHUB_REF == 'refs/heads/preview/service/*' ]]; then
+          elif [[ $GITHUB_REF == 'refs/heads/*/service/*' ]]; then
             echo "::set-output name=dir::service"
           fi
 
